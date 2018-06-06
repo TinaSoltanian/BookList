@@ -28,6 +28,7 @@ class UI {
     document.getElementById('isbn').value ='';
   }
 
+  // alert messages
   alert(message, type){
 
     let div = document.createElement('div');
@@ -43,6 +44,13 @@ class UI {
     setTimeout(function(){
         document.querySelector('.alert').remove();
     }, 3000)
+  }
+
+
+  deleteBook(target){
+    if (target.className === 'delete'){
+        target.parentElement.parentElement.remove();
+     }
   }
 }
 
@@ -74,9 +82,10 @@ document.getElementById("book-form").addEventListener("submit", function(e) {
 
 // Event listener for deleting book
 document.getElementById('book-list').addEventListener('click', function(e){
-    if (e.target.textContent === 'X' && e.target.tagName === 'A'){
-       e.target.parentElement.parentElement.remove();
-    }
+    const ui = new UI();
+    ui.deleteBook(e.target);
+
+    ui.alert('Deleted successfully','success');
 
     e.preventDefault();
 })
