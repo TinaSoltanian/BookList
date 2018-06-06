@@ -21,6 +21,7 @@ class UI {
     tbody.appendChild(tr);
   }
 
+  // clears are inputs
   clearFields(){
     document.getElementById('author').value ='';
     document.getElementById('title').value ='';
@@ -45,7 +46,7 @@ class UI {
   }
 }
 
-// Event Listener
+// Event Listener for add book
 document.getElementById("book-form").addEventListener("submit", function(e) {
   const title = document.getElementById("title").value;
   const author = document.getElementById("author").value;
@@ -70,3 +71,14 @@ document.getElementById("book-form").addEventListener("submit", function(e) {
 
   e.preventDefault();
 });
+
+// Event listener for deleting book
+document.getElementById('book-list').addEventListener('click', function(e){
+    if (e.target.textContent === 'X' && e.target.tagName === 'A'){
+       e.target.parentElement.parentElement.remove();
+    }
+
+    e.preventDefault();
+})
+
+
