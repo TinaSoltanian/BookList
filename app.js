@@ -65,6 +65,15 @@ class Store {
     return books;
   }
 
+  static displayBooks() {
+    const books = Store.getBooks();
+    books.forEach(function(book) {
+      console.log(book);
+      const ui = new UI();
+      ui.addToBookList(book);
+    });
+  }  
+
   static addBook(book) {
     const books = Store.getBooks();
 
@@ -73,19 +82,23 @@ class Store {
     localStorage.setItem("books", JSON.stringify(books));
   }
 
-  static removeBook() {}
-
-  static displayBooks() {
+  static removeBook(isbn) {
     const books = Store.getBooks();
-    books.forEach(function(book) {
-        const ui = new UI();
-        ui.addToBookList(book);
+
+    books.forEach(function(book, index){
+     if(book.isbn === isbn) {
+      books.splice(index, 1);
+     }
     });
+
+    localStorage.setItem('books', JSON.stringify(books));
   }
+
 }
 
 // Display books
 document.addEventListener('DOMContentLoaded', Store.displayBooks);
+
 
 // Event Listener for add book
 document.getElementById("book-form").addEventListener("submit", function(e) {
@@ -94,7 +107,6 @@ document.getElementById("book-form").addEventListener("submit", function(e) {
   const isbn = document.getElementById("isbn").value;
 
   const newBook = new Book(title, author, isbn);
-  console.log(newBook);
 
   const ui = new UI();
 
@@ -102,12 +114,12 @@ document.getElementById("book-form").addEventListener("submit", function(e) {
   if (title == "" || author == "" || isbn == "") {
     ui.alert("Please fill in all fields", "error");
   } else {
-    //ui.addToBookList(newBook);
+    ui.addToBookList(newBook);
     Store.addBook(newBook);
     ui.alert("Added successfully", "success");
-  }
 
-  ui.clearFields();
+    ui.clearFields();    
+  }
 
   e.preventDefault();
 });
@@ -117,7 +129,18 @@ document.getElementById("book-list").addEventListener("click", function(e) {
   const ui = new UI();
   ui.deleteBook(e.target);
 
+  Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
+  
   ui.alert("Deleted successfully", "success");
 
   e.preventDefault();
 });
+
+
+// if (document.readyState === 'loading') {
+
+//     document.addEventListener("DOMContentLoaded", Store.displayBooks);
+//   } else {
+//     console.log("document is already ready, just execute code here");
+//     Store.displayBooks;
+//   }
